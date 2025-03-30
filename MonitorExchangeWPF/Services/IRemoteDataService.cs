@@ -9,6 +9,6 @@ namespace MonitorExchangeWPF.Services
 {
     internal interface IRemoteDataService
     {
-        Task<LoadDataResponse<T>> LoadDataAsync<T>(string endPoint, int page, int pageSize);
+        Task<LoadDataResponse<T>> LoadDataAsync<T>(string endPoint, RequestLoadData request);
     }
 }

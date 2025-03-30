@@ -19,18 +19,21 @@ namespace MonitorExchangeWPF.Services
             _httpClient.BaseAddress = new Uri("http://localhost:5253");
         }
 
-        public async Task<LoadDataResponse<T>> LoadDataAsync<T>(string endPoint, int page, int pageSize)
+        public async Task<LoadDataResponse<T>> LoadDataAsync<T>(string endPoint, RequestLoadData request)
         {
             var loadData = new LoadDataResponse<T>();
 
             try
-            {                
-                HttpResponseMessage response = await _httpClient.GetAsync($"api/{endPoint}?page={page}&pageSize={pageSize}");
+            {
+                var json = JsonSerializer.Serialize(request);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                                
+                HttpResponseMessage response = await _httpClient.PostAsync($"api/{endPoint}", content);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var json = await response.Content.ReadAsStringAsync();
-                    var responseJSD = JsonSerializer.Deserialize<ResponseWrapper<T>>(json, new JsonSerializerOptions
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    var responseJSD = JsonSerializer.Deserialize<ResponseWrapper<T>>(jsonResponse, new JsonSerializerOptions
                     {
                         PropertyNameCaseInsensitive = true
                     });

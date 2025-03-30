@@ -145,8 +145,7 @@
                             ScrollViewer.VerticalScrollBarVisibility="Auto"
                             ScrollViewer.CanContentScroll="True"
                             VerticalAlignment="Stretch">
-
-                            
+                       
                             
                             <DataGrid.Columns>
 
@@ -188,7 +187,7 @@
                                                 <TextBox Grid.Row="1" Style="{StaticResource textboxFilter}"
                                                     VerticalAlignment="Center"
                                                     HorizontalAlignment="Stretch"
-                                                    Tag="GUIDfile"/>
+                                                    Tag="filterGUIDfile"/>
                                                 
                                             </Grid>
                                         </DataTemplate>
@@ -211,13 +210,12 @@
                                                 <TextBox Grid.Row="1" Style="{StaticResource textboxFilter}"
                                                     VerticalAlignment="Center"
                                                     HorizontalAlignment="Stretch"
-                                                    Tag="Item"/>
+                                                    Tag="filterItem"/>
 
                                             </Grid>
                                         </DataTemplate>
                                     </DataGridTextColumn.HeaderTemplate>
                                 </DataGridTextColumn>
-
 
                                 <DataGridTextColumn Header="All In" IsReadOnly="True" CanUserResize="False" Width="auto" Binding="{Binding AllIn}">
                                     <DataGridTextColumn.HeaderTemplate>
@@ -235,41 +233,38 @@
                                                 <TextBox Grid.Row="1" Style="{StaticResource textboxFilter}"
                                                     VerticalAlignment="Center"
                                                     HorizontalAlignment="Stretch"
-                                                    Tag="AllIn"/>
+                                                    Tag="filterAllIn"/>
 
                                             </Grid>
                                         </DataTemplate>
                                     </DataGridTextColumn.HeaderTemplate>
                                 </DataGridTextColumn>
 
-                                <DataGridTextColumn Header="Is upload" IsReadOnly="True" CanUserResize="False" Width="auto" Binding="{Binding IsUpload}">
-                                    <DataGridTextColumn.HeaderTemplate>
+                                <DataGridCheckBoxColumn Header="Is upload" IsReadOnly="True" CanUserResize="False" Width="auto" ElementStyle="{StaticResource CheckBoxReadOnlyStyle}"  Binding="{Binding IsUpload}">
+                                    <DataGridCheckBoxColumn.HeaderTemplate>
                                         <DataTemplate>
                                             <Grid Width="{Binding RelativeSource={RelativeSource AncestorType=DataGridColumnHeader}, Path=ActualWidth}">
                                                 <Grid.RowDefinitions>
-                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="auto"/>
                                                     <RowDefinition Height="*"/>
                                                 </Grid.RowDefinitions>
 
-                                                <TextBlock Grid.Row="0" Text="Is upload" 
-                                                    VerticalAlignment="Center" 
-                                                    Margin="0,0,5,5"/>
+                                                <TextBlock Grid.Row="0" Text="Is Upload" 
+                                                    VerticalAlignment="Top" 
+                                                    Margin="0,4,0,5"/>
 
-                                                <TextBox Grid.Row="1" Style="{StaticResource textboxFilter}"
-                                                    VerticalAlignment="Center"
-                                                    HorizontalAlignment="Stretch"
-                                                    Tag="IsГpload"/>
+                                                <CheckBox Grid.Row="1" Tag="filterIsUpload" Style="{StaticResource CheckBoxStyle}" HorizontalAlignment="Stretch"  Margin="0,10,0,10"/>
 
-                                            </Grid>
+                                            </Grid>                                                                                      
                                         </DataTemplate>
-                                    </DataGridTextColumn.HeaderTemplate>
-                                </DataGridTextColumn>   
+                                    </DataGridCheckBoxColumn.HeaderTemplate>
+                                </DataGridCheckBoxColumn>   
                                                       
                             </DataGrid.Columns>
 
-                        </DataGrid>
+                        </DataGrid>                       
 
-                            <!-- Pagination Section -->
+                        <!-- Pagination Section -->
                         <Border Grid.Row="2" HorizontalAlignment="Right" BorderBrush="#dee4ec" BorderThickness="1"
                                 CornerRadius="5" Padding="5" Background="White" Margin="0 10 10 10">
                             <StackPanel x:Name="PaginationPanelImports" Orientation="Horizontal"/>

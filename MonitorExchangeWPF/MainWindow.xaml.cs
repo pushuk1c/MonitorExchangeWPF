@@ -6,14 +6,11 @@ using System.Net.Http;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Documents;
-using System.Windows.Controls.Primitives;
 using MonitorExchangeWPF.Models;
 using MonitorExchangeWPF.Services;
+using MonitorExchangeWPF.Infrastructure.Helpers;
 
 namespace MonitorExchangeWPF
 {
@@ -35,8 +32,7 @@ namespace MonitorExchangeWPF
             InitializeComponent();
 
             _ = UpdateDataGridImport();
-            _ = UpdateDataGridProdukts();
-                      
+            _ = UpdateDataGridProdukts();                      
 
         }
 
@@ -48,7 +44,10 @@ namespace MonitorExchangeWPF
         // DataGrid Imports
         private async Task UpdateDataGridImport(int page = 1, int pageSize = 25)
         {
-            var loadData = await _remoteDataService.LoadDataAsync<FileExchange>("FileExchange", page, pageSize);
+            var filters = FilterDataGridHelper.GetFiltersFromDataGrid(ImportsFilesDataGrid);
+            var request = new RequestLoadData { Page = page, PageSize = pageSize, Filters = filters};       
+
+            var loadData = await _remoteDataService.LoadDataAsync<FileExchange>("FileExchange", request);
 
             if (loadData != null)
             {
@@ -112,7 +111,10 @@ namespace MonitorExchangeWPF
         // DataGrid Products
         private async Task UpdateDataGridProdukts(int page = 1, int pageSize = 20)
         {
-            var loadData = await _remoteDataService.LoadDataAsync<FEImportsProduct>("FileExchangeIE/FEImports", page, pageSize);
+            var filters = FilterDataGridHelper.GetFiltersFromDataGrid(ProductsDataGrid);
+            var request = new RequestLoadData { Page = page, PageSize = pageSize, Filters = filters };
+
+            var loadData = await _remoteDataService.LoadDataAsync<FEImportsProduct>("FileExchangeIE/FEImports", request);
 
             if (loadData != null)
             {
@@ -184,7 +186,7 @@ namespace MonitorExchangeWPF
             nextButton.Click += (s, e) => GoToPageProducts(currentPage + 1);
             pagPanel.Children.Add(nextButton);
         }
-
+        
         private void AddPageButton(StackPanel panel, int page, int currentPage)
         {
             Button pageButton = new Button
@@ -206,11 +208,7 @@ namespace MonitorExchangeWPF
 
             await UpdateDataGridProdukts(page);
         }
-
-        
-
-
-
+           
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
@@ -404,7 +402,7 @@ namespace MonitorExchangeWPF
             ImportsProducts.Visibility = Visibility.Visible;
         }
 
-        
+       
     }
 
     
