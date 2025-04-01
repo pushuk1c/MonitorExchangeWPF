@@ -11,6 +11,7 @@ using System.Windows.Media;
 using MonitorExchangeWPF.Models;
 using MonitorExchangeWPF.Services;
 using MonitorExchangeWPF.Infrastructure.Helpers;
+using System.Diagnostics;
 
 namespace MonitorExchangeWPF
 {
@@ -42,12 +43,15 @@ namespace MonitorExchangeWPF
         ///  
          
         // DataGrid Imports
-        private async Task UpdateDataGridImport(int page = 1, int pageSize = 25)
+        private async Task UpdateDataGridImport(int page = 1, int pageSize = 20)
         {
-            var filters = FilterDataGridHelper.GetFiltersFromDataGrid(ImportsFilesDataGrid);
+            
+            var filters = FilterDataGridHelper.GetFilterValuesFromDataGrid(ImportsFilesDataGrid);
+            filters["Type"] = "Import";
+
             var request = new RequestLoadData { Page = page, PageSize = pageSize, Filters = filters};       
 
-            var loadData = await _remoteDataService.LoadDataAsync<FileExchange>("FileExchange", request);
+            var loadData = await _remoteDataService.LoadDataAsync<FileExchange>("FileExchangeWPF/GetFilesExchange", request);
 
             if (loadData != null)
             {
@@ -108,13 +112,20 @@ namespace MonitorExchangeWPF
             await UpdateDataGridImport(page);
         }
 
+        private void FilterImportFileExchangeChanged(object sender, RoutedEventArgs e)
+        {
+            _ = UpdateDataGridImport();
+        }
+
         // DataGrid Products
         private async Task UpdateDataGridProdukts(int page = 1, int pageSize = 20)
         {
-            var filters = FilterDataGridHelper.GetFiltersFromDataGrid(ProductsDataGrid);
+            var filters = FilterDataGridHelper.GetFilterValuesFromDataGrid(ProductsDataGrid);
+            filters["Type"] = "Import";
+
             var request = new RequestLoadData { Page = page, PageSize = pageSize, Filters = filters };
 
-            var loadData = await _remoteDataService.LoadDataAsync<FEImportsProduct>("FileExchangeIE/FEImports", request);
+            var loadData = await _remoteDataService.LoadDataAsync<FEImportsProduct>("FileExchangeIEWPF/GetFEImports", request);
 
             if (loadData != null)
             {
@@ -208,7 +219,12 @@ namespace MonitorExchangeWPF
 
             await UpdateDataGridProdukts(page);
         }
-           
+
+        private void FilterImportProductChanged(object sender, RoutedEventArgs e)
+        {
+            _ = UpdateDataGridProdukts();
+        }
+
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)

@@ -6,51 +6,48 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows;
+using System.Windows.Controls.Primitives;
 
 namespace MonitorExchangeWPF.Infrastructure.Helpers
 {
     public static class FilterDataGridHelper
     {
-        public static Dictionary<string, string> GetFiltersFromDataGrid(DataGrid dataGrid)
+        public static Dictionary<string, string> GetFilterValuesFromDataGrid(DataGrid dataGrid)
         {
             var filters = new Dictionary<string, string>();
 
-            foreach (var column in dataGrid.Columns)
+            foreach (var header in FindVisualChildren<DataGridColumnHeader>(dataGrid))
             {
-                if (column is DataGridBoundColumn boundColumn && column.HeaderTemplate != null)
+                foreach (var tb in FindVisualChildren<TextBox>(header))
                 {
-                    var header = column.Header as string;
-                    var headerTemplate = column.HeaderTemplate.LoadContent();
-
-                    // Пошук всіх елементів з Tag усередині шаблону заголовка
-                    var inputs = FindVisualChildren<FrameworkElement>(headerTemplate)
-                        .Where(e => e.Tag is string);
-
-                    foreach (var input in inputs)
+                    if (tb.Tag is string tag && tag.Contains("filter") && !string.IsNullOrWhiteSpace(tb.Text))
                     {
-                        var tag = input.Tag as string;
-                        string? value = null;
+                        tb.GetBindingExpression(TextBox.TextProperty)?.UpdateSource();
+                        filters[tag.Replace("filter", "")] = tb.Text;
+                    }
+                }
 
-                        switch (input)
-                        {
-                            case TextBox tb:
-                                value = tb.Text;
-                                break;
-                            case CheckBox cb:
-                                value = cb.IsChecked.HasValue ? cb.IsChecked.Value.ToString() : null;
-                                break;
-                            case ComboBox combo:
-                                value = combo.SelectedValue?.ToString();
-                                break;
-                            case DatePicker dp:
-                                value = dp.SelectedDate?.ToString("yyyy-MM-dd");
-                                break;
-                        }
+                foreach (var cb in FindVisualChildren<CheckBox>(header))
+                {
+                    if (cb.Tag is string tag && tag.Contains("filter") && cb.IsChecked is not null)
+                    {
+                        filters[tag.Replace("filter", "")] = cb.IsChecked.HasValue ? cb.IsChecked.Value.ToString() : string.Empty;
+                    }
+                }
 
-                        if (!string.IsNullOrWhiteSpace(tag) && !string.IsNullOrWhiteSpace(value))
-                        {
-                            filters[tag] = value;
-                        }
+                foreach (var dp in FindVisualChildren<DatePicker>(header))
+                {
+                    if (dp.Tag is string tag && tag.Contains("filter"))
+                    {
+                        filters[tag.Replace("filter", "")] = dp.SelectedDate?.ToString("yyyy-MM-dd") ?? string.Empty;
+                    }
+                }
+
+                foreach (var combo in FindVisualChildren<ComboBox>(header))
+                {
+                    if (combo.Tag is string tag && tag.Contains("filter"))
+                    {
+                        filters[tag.Replace("filter", "")] = combo.SelectedValue?.ToString() ?? string.Empty;
                     }
                 }
             }
@@ -58,18 +55,19 @@ namespace MonitorExchangeWPF.Infrastructure.Helpers
             return filters;
         }
 
-        private static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
+        public static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
         {
-            if (depObj == null) yield break;
-
-            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+            if (depObj != null)
             {
-                DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
-                if (child is T t)
-                    yield return t;
+                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+                {
+                    DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
+                    if (child is T t)
+                        yield return t;
 
-                foreach (T childOfChild in FindVisualChildren<T>(child))
-                    yield return childOfChild;
+                    foreach (T childOfChild in FindVisualChildren<T>(child))
+                        yield return childOfChild;
+                }
             }
         }
     }

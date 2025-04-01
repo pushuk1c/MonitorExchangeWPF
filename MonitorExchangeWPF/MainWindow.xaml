@@ -180,14 +180,15 @@
                                                     <RowDefinition Height="*"/>
                                                 </Grid.RowDefinitions>
 
-                                                <TextBlock Grid.Row="0" Text="GUID file" 
+                                                <TextBlock Grid.Row="0" Text="GUID" 
                                                     VerticalAlignment="Center" 
                                                     Margin="0,0,5,5"/>
 
                                                 <TextBox Grid.Row="1" Style="{StaticResource textboxFilter}"
                                                     VerticalAlignment="Center"
                                                     HorizontalAlignment="Stretch"
-                                                    Tag="filterGUIDfile"/>
+                                                    Tag="filterStrId"
+                                                    TextChanged="FilterImportFileExchangeChanged"/>
                                                 
                                             </Grid>
                                         </DataTemplate>
@@ -210,7 +211,8 @@
                                                 <TextBox Grid.Row="1" Style="{StaticResource textboxFilter}"
                                                     VerticalAlignment="Center"
                                                     HorizontalAlignment="Stretch"
-                                                    Tag="filterItem"/>
+                                                    Tag="filterItem"
+                                                    TextChanged="FilterImportFileExchangeChanged"/>
 
                                             </Grid>
                                         </DataTemplate>
@@ -233,7 +235,8 @@
                                                 <TextBox Grid.Row="1" Style="{StaticResource textboxFilter}"
                                                     VerticalAlignment="Center"
                                                     HorizontalAlignment="Stretch"
-                                                    Tag="filterAllIn"/>
+                                                    Tag="filterInAll"
+                                                    TextChanged="FilterImportFileExchangeChanged"/>
 
                                             </Grid>
                                         </DataTemplate>
@@ -249,11 +252,14 @@
                                                     <RowDefinition Height="*"/>
                                                 </Grid.RowDefinitions>
 
-                                                <TextBlock Grid.Row="0" Text="Is Upload" 
+                                                <TextBlock Grid.Row="0" Text="Is Upload"
                                                     VerticalAlignment="Top" 
                                                     Margin="0,4,0,5"/>
 
-                                                <CheckBox Grid.Row="1" Tag="filterIsUpload" Style="{StaticResource CheckBoxStyle}" HorizontalAlignment="Stretch"  Margin="0,10,0,10"/>
+                                                <CheckBox Grid.Row="1" Tag="filterIsUpload" IsThreeState="True" IsChecked="{x:Null}" Style="{StaticResource CheckBoxStyle}" HorizontalAlignment="Stretch"  Margin="0,10,0,10"
+                                                    Checked="FilterImportFileExchangeChanged"
+                                                    Unchecked="FilterImportFileExchangeChanged"
+                                                    Indeterminate="FilterImportFileExchangeChanged" />
 
                                             </Grid>                                                                                      
                                         </DataTemplate>
@@ -311,22 +317,336 @@
                                 </DataGridTemplateColumn>-->
 
                                 <!-- <DataGridTextColumn Header="#" IsReadOnly="True" CanUserResize="False" Width="auto" Binding="{Binding Id}"/> -->
-                                <DataGridTextColumn Header="GUIDFile" IsReadOnly="True" CanUserResize="False" Width="auto" Binding="{Binding GUIDFile}"/>
-                                <DataGridTextColumn Header="Code" IsReadOnly="True" CanUserResize="False" Width="auto" Binding="{Binding Code}"/>
-                                <DataGridTextColumn Header="Artikul" IsReadOnly="True" CanUserResize="False" Width="auto" Binding="{Binding Artikul}"/>
-                                <DataGridTextColumn Header="Name" IsReadOnly="True" CanUserResize="False" Width="auto" Binding="{Binding Name}"/>
-                                <DataGridTextColumn Header="Size" IsReadOnly="True" CanUserResize="False" Width="auto" Binding="{Binding Size}"/>
-                                <DataGridTextColumn Header="View" IsReadOnly="True" CanUserResize="False" Width="auto" Binding="{Binding View}"/>
-                                <DataGridTextColumn Header="Manufacturer" IsReadOnly="True" CanUserResize="False" Width="auto" Binding="{Binding Manufacturer}"/>
-                                <DataGridTextColumn Header="Country" IsReadOnly="True" CanUserResize="False" Width="auto" Binding="{Binding Country}"/>
-                                <DataGridTextColumn Header="Material" IsReadOnly="True" CanUserResize="False" Width="auto" Binding="{Binding Material}"/>
-                                <DataGridTextColumn Header="Season" IsReadOnly="True" CanUserResize="False" Width="auto" Binding="{Binding Season}"/>
-                                <DataGridTextColumn Header="Color" IsReadOnly="True" CanUserResize="False" Width="auto" Binding="{Binding Color}"/>
-                                <DataGridTextColumn Header="Categoria" IsReadOnly="True" CanUserResize="False" Width="auto" Binding="{Binding Categoria}"/>
-                                <DataGridTextColumn Header="Marke" IsReadOnly="True" CanUserResize="False" Width="auto" Binding="{Binding Marke}"/>
-                                <DataGridTextColumn Header="Brend" IsReadOnly="True" CanUserResize="False" Width="auto" Binding="{Binding Brend}"/>
-                                <DataGridTextColumn Header="Sex" IsReadOnly="True" CanUserResize="False" Width="auto" Binding="{Binding Sex}"/>
-                               
+                                <DataGridTextColumn Header="GUID" IsReadOnly="True" CanUserResize="False" Width="auto" Binding="{Binding GUIDFile}">
+                                    <DataGridTextColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <Grid Width="{Binding RelativeSource={RelativeSource AncestorType=DataGridColumnHeader}, Path=ActualWidth}">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="*"/>
+                                                </Grid.RowDefinitions>
+
+                                                <TextBlock Grid.Row="0" Text="GUID" 
+                                                        VerticalAlignment="Center" 
+                                                        Margin="0,0,5,5"/>
+
+                                                <TextBox Grid.Row="1" Style="{StaticResource textboxFilter}"
+                                                        VerticalAlignment="Center"
+                                                        HorizontalAlignment="Stretch"
+                                                        Tag="filterStrId"
+                                                        TextChanged="FilterImportProductChanged"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </DataGridTextColumn.HeaderTemplate>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="Code" IsReadOnly="True" CanUserResize="False" Width="auto" Binding="{Binding Code}">
+                                    <DataGridTextColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <Grid Width="{Binding RelativeSource={RelativeSource AncestorType=DataGridColumnHeader}, Path=ActualWidth}">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="*"/>
+                                                </Grid.RowDefinitions>
+
+                                                <TextBlock Grid.Row="0" Text="Code" 
+                                                    VerticalAlignment="Center" 
+                                                    Margin="0,0,5,5"/>
+
+                                                <TextBox Grid.Row="1" Style="{StaticResource textboxFilter}"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Stretch"
+                                                    Tag="filterCode"
+                                                    TextChanged="FilterImportProductChanged"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </DataGridTextColumn.HeaderTemplate>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="Artikul" IsReadOnly="True" CanUserResize="False" Width="auto" Binding="{Binding Artikul}">
+                                    <DataGridTextColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <Grid Width="{Binding RelativeSource={RelativeSource AncestorType=DataGridColumnHeader}, Path=ActualWidth}">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="*"/>
+                                                </Grid.RowDefinitions>
+
+                                                <TextBlock Grid.Row="0" Text="Artikul" 
+                                                    VerticalAlignment="Center" 
+                                                    Margin="0,0,5,5"/>
+
+                                                <TextBox Grid.Row="1" Style="{StaticResource textboxFilter}"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Stretch"
+                                                    Tag="filterArtikul"
+                                                    TextChanged="FilterImportProductChanged"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </DataGridTextColumn.HeaderTemplate>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="Name" IsReadOnly="True" CanUserResize="False" Width="auto" Binding="{Binding Name}">
+                                    <DataGridTextColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <Grid Width="{Binding RelativeSource={RelativeSource AncestorType=DataGridColumnHeader}, Path=ActualWidth}">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="*"/>
+                                                </Grid.RowDefinitions>
+
+                                                <TextBlock Grid.Row="0" Text="Name" 
+                                                    VerticalAlignment="Center" 
+                                                    Margin="0,0,5,5"/>
+
+                                                <TextBox Grid.Row="1" Style="{StaticResource textboxFilter}"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Stretch"
+                                                    Tag="filterName"
+                                                    TextChanged="FilterImportProductChanged"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </DataGridTextColumn.HeaderTemplate>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="Size" IsReadOnly="True" CanUserResize="False" Width="auto" Binding="{Binding Size}">
+                                    <DataGridTextColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <Grid Width="{Binding RelativeSource={RelativeSource AncestorType=DataGridColumnHeader}, Path=ActualWidth}">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="*"/>
+                                                </Grid.RowDefinitions>
+
+                                                <TextBlock Grid.Row="0" Text="Size" 
+                                                    VerticalAlignment="Center" 
+                                                    Margin="0,0,5,5"/>
+
+                                                <TextBox Grid.Row="1" Style="{StaticResource textboxFilter}"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Stretch"
+                                                    Tag="filterSize"
+                                                    TextChanged="FilterImportProductChanged"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </DataGridTextColumn.HeaderTemplate>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="View" IsReadOnly="True" CanUserResize="False" Width="auto" Binding="{Binding View}">
+                                    <DataGridTextColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <Grid Width="{Binding RelativeSource={RelativeSource AncestorType=DataGridColumnHeader}, Path=ActualWidth}">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="*"/>
+                                                </Grid.RowDefinitions>
+
+                                                <TextBlock Grid.Row="0" Text="View" 
+                                                    VerticalAlignment="Center" 
+                                                    Margin="0,0,5,5"/>
+
+                                                <TextBox Grid.Row="1" Style="{StaticResource textboxFilter}"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Stretch"
+                                                    Tag="filterView"
+                                                    TextChanged="FilterImportProductChanged"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </DataGridTextColumn.HeaderTemplate>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="Manufacturer" IsReadOnly="True" CanUserResize="False" Width="auto" Binding="{Binding Manufacturer}">
+                                    <DataGridTextColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <Grid Width="{Binding RelativeSource={RelativeSource AncestorType=DataGridColumnHeader}, Path=ActualWidth}">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="*"/>
+                                                </Grid.RowDefinitions>
+
+                                                <TextBlock Grid.Row="0" Text="Manufacturer" 
+                                                    VerticalAlignment="Center" 
+                                                    Margin="0,0,5,5"/>
+
+                                                <TextBox Grid.Row="1" Style="{StaticResource textboxFilter}"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Stretch"
+                                                    Tag="filterManufacturer"
+                                                    TextChanged="FilterImportProductChanged"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </DataGridTextColumn.HeaderTemplate>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="Country" IsReadOnly="True" CanUserResize="False" Width="auto" Binding="{Binding Country}">
+                                    <DataGridTextColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <Grid Width="{Binding RelativeSource={RelativeSource AncestorType=DataGridColumnHeader}, Path=ActualWidth}">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="*"/>
+                                                </Grid.RowDefinitions>
+
+                                                <TextBlock Grid.Row="0" Text="Country" 
+                                                    VerticalAlignment="Center" 
+                                                    Margin="0,0,5,5"/>
+
+                                                <TextBox Grid.Row="1" Style="{StaticResource textboxFilter}"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Stretch"
+                                                    Tag="filterCountry"
+                                                    TextChanged="FilterImportProductChanged"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </DataGridTextColumn.HeaderTemplate>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="Material" IsReadOnly="True" CanUserResize="False" Width="auto" Binding="{Binding Material}">
+                                    <DataGridTextColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <Grid Width="{Binding RelativeSource={RelativeSource AncestorType=DataGridColumnHeader}, Path=ActualWidth}">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="*"/>
+                                                </Grid.RowDefinitions>
+
+                                                <TextBlock Grid.Row="0" Text="Material" 
+                                                    VerticalAlignment="Center" 
+                                                    Margin="0,0,5,5"/>
+
+                                                <TextBox Grid.Row="1" Style="{StaticResource textboxFilter}"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Stretch"
+                                                    Tag="filterMaterial"
+                                                    TextChanged="FilterImportProductChanged"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </DataGridTextColumn.HeaderTemplate>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="Season" IsReadOnly="True" CanUserResize="False" Width="auto" Binding="{Binding Season}">
+                                    <DataGridTextColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <Grid Width="{Binding RelativeSource={RelativeSource AncestorType=DataGridColumnHeader}, Path=ActualWidth}">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="*"/>
+                                                </Grid.RowDefinitions>
+
+                                                <TextBlock Grid.Row="0" Text="Season" 
+                                                    VerticalAlignment="Center" 
+                                                    Margin="0,0,5,5"/>
+
+                                                <TextBox Grid.Row="1" Style="{StaticResource textboxFilter}"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Stretch"
+                                                    Tag="filterSeason"
+                                                    TextChanged="FilterImportProductChanged"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </DataGridTextColumn.HeaderTemplate>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="Color" IsReadOnly="True" CanUserResize="False" Width="auto" Binding="{Binding Color}">
+                                    <DataGridTextColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <Grid Width="{Binding RelativeSource={RelativeSource AncestorType=DataGridColumnHeader}, Path=ActualWidth}">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="*"/>
+                                                </Grid.RowDefinitions>
+
+                                                <TextBlock Grid.Row="0" Text="Color" 
+                                                    VerticalAlignment="Center" 
+                                                    Margin="0,0,5,5"/>
+
+                                                <TextBox Grid.Row="1" Style="{StaticResource textboxFilter}"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Stretch"
+                                                    Tag="filterColor"
+                                                    TextChanged="FilterImportProductChanged"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </DataGridTextColumn.HeaderTemplate>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="Categoria" IsReadOnly="True" CanUserResize="False" Width="auto" Binding="{Binding Categoria}">
+                                    <DataGridTextColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <Grid Width="{Binding RelativeSource={RelativeSource AncestorType=DataGridColumnHeader}, Path=ActualWidth}">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="*"/>
+                                                </Grid.RowDefinitions>
+
+                                                <TextBlock Grid.Row="0" Text="Categoria" 
+                                                    VerticalAlignment="Center" 
+                                                    Margin="0,0,5,5"/>
+
+                                                <TextBox Grid.Row="1" Style="{StaticResource textboxFilter}"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Stretch"
+                                                    Tag="filterCategoria"
+                                                    TextChanged="FilterImportProductChanged"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </DataGridTextColumn.HeaderTemplate>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="Marke" IsReadOnly="True" CanUserResize="False" Width="auto" Binding="{Binding Marke}">
+                                    <DataGridTextColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <Grid Width="{Binding RelativeSource={RelativeSource AncestorType=DataGridColumnHeader}, Path=ActualWidth}">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="*"/>
+                                                </Grid.RowDefinitions>
+
+                                                <TextBlock Grid.Row="0" Text="Marke" 
+                                                    VerticalAlignment="Center" 
+                                                    Margin="0,0,5,5"/>
+
+                                                <TextBox Grid.Row="1" Style="{StaticResource textboxFilter}"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Stretch"
+                                                    Tag="filterMarke"
+                                                    TextChanged="FilterImportProductChanged"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </DataGridTextColumn.HeaderTemplate>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="Brend" IsReadOnly="True" CanUserResize="False" Width="auto" Binding="{Binding Brend}">
+                                    <DataGridTextColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <Grid Width="{Binding RelativeSource={RelativeSource AncestorType=DataGridColumnHeader}, Path=ActualWidth}">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="*"/>
+                                                </Grid.RowDefinitions>
+
+                                                <TextBlock Grid.Row="0" Text="Brend" 
+                                                    VerticalAlignment="Center" 
+                                                    Margin="0,0,5,5"/>
+
+                                                <TextBox Grid.Row="1" Style="{StaticResource textboxFilter}"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Stretch"
+                                                    Tag="filterBrend"
+                                                    TextChanged="FilterImportProductChanged"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </DataGridTextColumn.HeaderTemplate>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="Sex" IsReadOnly="True" CanUserResize="False" Width="auto" Binding="{Binding Sex}">
+                                    <DataGridTextColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <Grid Width="{Binding RelativeSource={RelativeSource AncestorType=DataGridColumnHeader}, Path=ActualWidth}">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="*"/>
+                                                </Grid.RowDefinitions>
+
+                                                <TextBlock Grid.Row="0" Text="Sex" 
+                                                    VerticalAlignment="Center" 
+                                                    Margin="0,0,5,5"/>
+
+                                                <TextBox Grid.Row="1" Style="{StaticResource textboxFilter}"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Stretch"
+                                                    Tag="filterSex"
+                                                    TextChanged="FilterImportProductChanged"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </DataGridTextColumn.HeaderTemplate>
+                                </DataGridTextColumn>
 
                             </DataGrid.Columns>
 

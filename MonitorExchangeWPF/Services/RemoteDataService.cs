@@ -28,7 +28,7 @@ namespace MonitorExchangeWPF.Services
                 var json = JsonSerializer.Serialize(request);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
                                 
-                HttpResponseMessage response = await _httpClient.PostAsync($"api/{endPoint}", content);
+                HttpResponseMessage response = await _httpClient.PostAsync($"api/wpf/{endPoint}", content);
 
                 if (response.IsSuccessStatusCode)
                 {
