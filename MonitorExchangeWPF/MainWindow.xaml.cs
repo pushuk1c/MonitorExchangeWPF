@@ -12,6 +12,8 @@ using MonitorExchangeWPF.Models;
 using MonitorExchangeWPF.Services;
 using MonitorExchangeWPF.Infrastructure.Helpers;
 using System.Diagnostics;
+using System.Globalization;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MonitorExchangeWPF
 {
@@ -224,6 +226,119 @@ namespace MonitorExchangeWPF
         {
             _ = UpdateDataGridProdukts();
         }
+
+
+        private void OpenDateRangeDialog_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            if (button == null) return;
+
+            DependencyObject parent = VisualTreeHelper.GetParent(button);
+            while (parent != null && parent is not Grid)
+            {
+                parent = VisualTreeHelper.GetParent(parent);
+            }
+
+            var parentGrid = parent as Grid;
+            if (parentGrid == null) return;
+
+            TextBox filterDateRangeTextBox = null;
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parentGrid); i++)
+            {
+                var child = VisualTreeHelper.GetChild(parentGrid, i);
+                if (child is TextBox tb && (tb.Tag?.ToString() == "filterDateRangeTextBox"))
+                {
+                    filterDateRangeTextBox = tb;
+                    break;
+                }
+            }
+
+            if (filterDateRangeTextBox == null) return;
+
+            // Dialog box
+            Window dialog = new Window
+            {
+                Title = "Select a date and time range",
+                Width = 200,
+                Height = 220,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                Owner = this,
+                ResizeMode = ResizeMode.NoResize
+            };
+
+            var fromDate = DateTime.Now.AddHours(-1);
+            var toDate = DateTime.Now;
+            
+            string[] parts = filterDateRangeTextBox.Text.Split('-');
+            if (parts.Length == 2 &&
+                DateTime.TryParseExact(parts[0], "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime from) &&
+                DateTime.TryParseExact(parts[1], "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime to))
+            {
+                fromDate = from;
+                toDate = to;
+            }
+
+            var fromDatePicker = new DatePicker { SelectedDate = fromDate, Margin = new Thickness(5), Width = 100 };
+            var fromTimeBox = new TextBox { Text = fromDate.ToString("HH:mm:ss"), Margin = new Thickness(5), Width = 50 };
+
+            var toDatePicker = new DatePicker { SelectedDate = toDate, Margin = new Thickness(5), Width = 100 };
+            var toTimeBox = new TextBox { Text = toDate.ToString("HH:mm:ss"), Margin = new Thickness(5), Width = 50 };
+
+            var okButton = new Button { Content = "OK", Margin = new Thickness(5), Width = 50, HorizontalAlignment = HorizontalAlignment.Right };
+            var cancelButton = new Button { Content = "Cancel", Margin = new Thickness(5), Width = 50, HorizontalAlignment = HorizontalAlignment.Right };
+            var cleanButton = new Button { Content = "Clean", Margin = new Thickness(5), Width = 50, HorizontalAlignment = HorizontalAlignment.Right };
+
+            okButton.Click += (s, args) =>
+            {
+                if (fromDatePicker.SelectedDate.HasValue && toDatePicker.SelectedDate.HasValue)
+                {
+                    if (TimeSpan.TryParse(fromTimeBox.Text, out TimeSpan fromTime) &&
+                        TimeSpan.TryParse(toTimeBox.Text, out TimeSpan toTime))
+                    {
+                        DateTime from = fromDatePicker.SelectedDate.Value.Date + fromTime;
+                        DateTime to = toDatePicker.SelectedDate.Value.Date + toTime;
+
+                        filterDateRangeTextBox.Text = $"{from:dd.MM.yyyy HH:mm:ss}-{to:dd.MM.yyyy HH:mm:ss}";
+                        dialog.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Invalid time format. Please enter in the format HH:mm", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
+                }
+            };
+
+            cancelButton.Click += (s, args) => {  dialog.Close(); };
+            cleanButton.Click += (s, args) => { filterDateRangeTextBox.Text = "";  dialog.Close(); };
+
+            var panel = new StackPanel();
+
+            panel.Children.Add(new TextBlock { Text = "Start date and time:", Margin = new Thickness(5) });
+            var fromPanel = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(5) };
+            fromPanel.Children.Add(fromDatePicker);
+            fromPanel.Children.Add(fromTimeBox);
+
+            panel.Children.Add(fromPanel);
+
+            panel.Children.Add(new TextBlock { Text = "End date and time:", Margin = new Thickness(5) });
+            var toPanel = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(5) };
+            toPanel.Children.Add(toDatePicker);
+            toPanel.Children.Add(toTimeBox);
+
+            panel.Children.Add(toPanel);
+
+            var  buttonPanel = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(5), HorizontalAlignment = HorizontalAlignment.Right };
+
+            buttonPanel.Children.Add(cancelButton);
+            buttonPanel.Children.Add(cleanButton);
+            buttonPanel.Children.Add(okButton);
+
+            panel.Children.Add(buttonPanel);
+
+            dialog.Content = panel;
+            dialog.ShowDialog();
+        }
+
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {

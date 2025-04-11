@@ -149,7 +149,7 @@
                             
                             <DataGrid.Columns>
 
-                                <DataGridTextColumn Header="Date" IsReadOnly="True" CanUserResize="False" Width="auto" Binding="{Binding Date}">
+                                <DataGridTextColumn Header="Date" IsReadOnly="True" CanUserResize="False" Width="auto" Binding="{Binding Date, StringFormat='{}{0:dd.MM.yyyy HH:mm:ss}'}">
                                     <DataGridTextColumn.HeaderTemplate>
                                         <DataTemplate>
                                             <Grid Width="{Binding RelativeSource={RelativeSource AncestorType=DataGridColumnHeader}, Path=ActualWidth}">
@@ -160,12 +160,24 @@
 
                                                 <TextBlock Grid.Row="0" Text="Date" 
                                                     VerticalAlignment="Center" 
-                                                     Margin="0,0,5,5"/>
+                                                    Margin="0,0,0,7"/>
 
-                                                <TextBox Grid.Row="1" Style="{StaticResource textboxFilter}"
-                                                    VerticalAlignment="Center"
-                                                    HorizontalAlignment="Stretch"
-                                                    Tag="Date"/>
+                                                <TextBox Grid.Row="1" Tag="filterDateRangeTextBox"
+                                                            IsReadOnly="True"
+                                                            TextChanged="FilterImportFileExchangeChanged"
+                                                            Margin="0,2,0,2"
+                                                            Style="{StaticResource textboxFilter}"/>
+
+                                                <Button Grid.Row="1" Content="📅"
+                                                            Width="24"
+                                                            Height="21"
+                                                            HorizontalAlignment="Right"
+                                                            VerticalAlignment="Stretch"
+                                                            Margin="0,2,0,2" 
+                                                            Click="OpenDateRangeDialog_Click"
+                                                            Style="{StaticResource calendarButton}"/>                                              
+
+
                                             </Grid>
                                         </DataTemplate>
                                     </DataGridTextColumn.HeaderTemplate>
